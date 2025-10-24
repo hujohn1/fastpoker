@@ -11,13 +11,13 @@ class Card{
     constructor(suit, rank){
         this.suit = suit;
         this.rank = rank;
-        this.bits = []
-    }
-    get_bits(){
         let rr = ranks.indexOf(this.rank)+16
         let sr = suits.indexOf(this.suit)+12
         let pr = primes[this.rank]
         this.bits = (1<<rr) | (1<<sr) | (pr) | (rr<<8)
+    }
+    tostring(){
+        return this.bits.toString(2)
     }
 }   
 
@@ -48,10 +48,7 @@ class Deck {
         console.log('Shuffled')
     }
 }
-export default Deck
+export {Deck, Card};
 //generate deck of 52 cards
 //have function to shuffle cards
 //have function to deal cards in sequential order on flop, turn, river
-const jc = new Card('D', 'K')
-jc.get_bits()
-console.log(jc.bits.toString(2))
