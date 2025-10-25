@@ -19,6 +19,7 @@ const lineReader = readline.createInterface({
 
 lineReader.on('line', function (line) {
     const cols = line.trim().split(/\s+/)
+    
     if(cols[cols.length-1] === 'Flush'){
         const [c1, c2, c3, c4, c5]  = [new Card('S',cols[5]), new Card('S',cols[6]), new Card('S',cols[7]), new Card('S',cols[8]), new Card('S',cols[9])]
         let value  = (c1.bits | c2.bits | c3.bits | c4.bits | c5.bits) >> 16
@@ -45,13 +46,21 @@ lineReader.on('close', function () {
     //console.log(Unique5[4615])
     //console.log(map.get(21021))
     const hand = [
+        new Card('S', '2'),
+        new Card('S', '3'),
+        new Card('S', '4'),
         new Card('S', '5'),
-        new Card('S', '8'),
-        new Card('S', '6'),
-        new Card('S', '7'),
-        new Card('S', '3')
+        new Card('S', '6')
+    ];
+    const hand2 = [
+        new Card('S', 'A'),
+        new Card('S', 'Q'),
+        new Card('S', 'K'),
+        new Card('S', 'J'),
+        new Card('S', 'T')
     ];
     console.log(evaluation(hand))
+    console.log(evaluation(hand2))
 });
 
 const isFlush=(hand)=>{
@@ -59,11 +68,14 @@ const isFlush=(hand)=>{
 }
 const evaluation=(hand)=>{
     let value = (hand[0].bits | hand[1].bits | hand[2].bits | hand[3].bits | hand[4].bits) >> 16
-    console.log(value)
     if(isFlush(hand)){
+        console.log("Flush")
         if(Flushes[value]!= undefined){return Flushes[value]}
     }
-    if(Unique5[value]!=undefined){return Unique5[value]}
+    if(Unique5[value]!=undefined){
+        console.log('High/Straight')
+        return Unique5[value]
+    }
     else{
         let pproduct = (hand[0].bits & 0xFF) * (hand[1].bits & 0xFF) * (hand[2].bits & 0xFF) * (hand[3].bits & 0xFF) * (hand[4].bits & 0xFF)
         return map.get(pproduct)

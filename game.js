@@ -8,11 +8,17 @@ const Status = {
         "TURN": {transitions: ["RIVER"]}, 
         "RIVER": {transitions: ["NEWROUND", "END"]}, 
 }
+const minBet = 10;
+const smallBlind = minBet/2;
+const bigBlind = minBet; 
+
 class Game{
     constructor(players){
         this.gamedeck = new Deck()
         this.gamedeck.shuffle()
         this.players = players
+        this.dealerIndex = 0
+        this.currentStatus = 'NEWROUND'
     }
     //get a handle to a deck object
     deal(){
@@ -30,6 +36,20 @@ class Game{
         }
         console.log(this.gamedeck.deck.length)
         console.log('Dealt cards')
+    }
+    startRound(){
+        //change Status to PREFLOP once check goes around that everyone is ready
+        //timer module countdown before autofold
+        //go around in counterclockwise order for each player
+        if(this.players.length > 1){
+            this.players[this.dealerIndex].status  = 'DEALER'
+            this.players[this.dealerIndex+1].status = 'SMALLBLIND'
+            this.players[this.dealerIndex+2].status = 'BIGBLIND'
+        }
+        if(this.players.length == 2){
+            this.players[this.dealerIndex].status = 'SMALLBLIND'
+            this.players[this.dealerIndex+1].status = 'BIGBLIND'
+        }
     }
 }
 
